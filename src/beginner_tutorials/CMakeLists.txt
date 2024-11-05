@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.8)
 project(beginner_tutorials)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 # Default to C++14
 if(NOT CMAKE_CXX_STANDARD)
   set(CMAKE_CXX_STANDARD 14)
@@ -21,7 +23,11 @@ find_package(example_interfaces REQUIRED)
 include_directories(include)
 
 # Create the publisher executable
-add_executable(talker src/simple_publisher.cpp)
+add_executable(talker 
+  src/simple_publisher.cpp
+  src/main.cpp
+)
+
 ament_target_dependencies(talker 
   rclcpp 
   std_msgs

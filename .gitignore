@@ -6,3 +6,10 @@ install/
 
 # Log directory
 log/
+
+# compile commands
+compile_commands.json
+
+.clang-tidy
+
+.vscode
