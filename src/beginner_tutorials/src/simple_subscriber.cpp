@@ -1,20 +1,30 @@
 #include "simple_subscriber.hpp"
 
-SimpleSubscriber::SimpleSubscriber()
-: Node("simple_subscriber") {
-    subscription_ = this->create_subscription<std_msgs::msg::String>(
-        "topic", 10,
-        std::bind(&SimpleSubscriber::topic_callback, this,
-        std::placeholders::_1));
+// Constructor for the SimpleSubscriber class
+SimpleSubscriber::SimpleSubscriber() : Node("simple_subscriber") {
+  // Creating a subscription for std_msgs::msg::String with a queue size of 10
+  subscription_ = this->create_subscription<std_msgs::msg::String>(
+      "topic", 10,
+      // Binding the topic_callback function to the SimpleSubscriber instance
+      std::bind(&SimpleSubscriber::topic_callback, this,
+                std::placeholders::_1));
 }
 
-void SimpleSubscriber::topic_callback(const std_msgs::msg::String::SharedPtr msg) {
-    RCLCPP_INFO(this->get_logger(), "I heard: '%s'", msg->data.c_str());
+// Callback function for the subscription
+void SimpleSubscriber::topic_callback(
+    const std_msgs::msg::String::SharedPtr msg) {
+  // Logging the received message data
+  RCLCPP_INFO(this->get_logger(), "I heard: '%s'", msg->data.c_str());
 }
 
+// Main function
 int main(int argc, char* argv[]) {
-    rclcpp::init(argc, argv);
-    rclcpp::spin(std::make_shared<SimpleSubscriber>());
-    rclcpp::shutdown();
-    return 0;
+  // Initializing the ROS 2 system
+  rclcpp::init(argc, argv);
+  // Creating a SimpleSubscriber instance and spinning it to handle incoming messages
+  rclcpp::spin(std::make_shared<SimpleSubscriber>());
+  // Shutdown the ROS 2 system
+  rclcpp::shutdown();
+  // Return 0 to indicate successful execution
+  return 0;
 }

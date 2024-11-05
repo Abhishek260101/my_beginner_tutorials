@@ -11,11 +11,11 @@ find_package(std_msgs REQUIRED)
 
 include_directories(include)
 
-# Create the publisher executable
+# Creating the publisher executable
 add_executable(talker src/simple_publisher.cpp)
 ament_target_dependencies(talker rclcpp std_msgs)
 
-# Create the subscriber executable
+# Creating the subscriber executable
 add_executable(listener src/simple_subscriber.cpp)
 ament_target_dependencies(listener rclcpp std_msgs)
 
