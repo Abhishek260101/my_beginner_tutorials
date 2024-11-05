@@ -2,13 +2,26 @@
 
 SimpleSubscriber::SimpleSubscriber()
 : Node("simple_subscriber") {
+    RCLCPP_INFO_STREAM(this->get_logger(), "Initializing Subscriber Node");
+    
     subscription_ = this->create_subscription<std_msgs::msg::String>(
-        "topic", 10,
+        "/chatter", 10,
         std::bind(&SimpleSubscriber::topic_callback, this,
         std::placeholders::_1));
+        
+    if (!subscription_) {
+        RCLCPP_FATAL(this->get_logger(), "Failed to create subscriber");
+        return;
+    }
+    
+    RCLCPP_DEBUG_STREAM(this->get_logger(), "Subscriber created successfully on /chatter topic");
 }
 
 void SimpleSubscriber::topic_callback(const std_msgs::msg::String::SharedPtr msg) {
+    if (msg->data.empty()) {
+        RCLCPP_ERROR(this->get_logger(), "Received empty message");
+        return;
+    }
     RCLCPP_INFO(this->get_logger(), "I heard: '%s'", msg->data.c_str());
 }
 
