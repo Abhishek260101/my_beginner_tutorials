@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 3.8)
 project(beginner_tutorials)
 
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
@@ -11,11 +14,11 @@ find_package(std_msgs REQUIRED)
 
 include_directories(include)
 
-# Create the publisher executable
+# Creating the publisher executable
 add_executable(talker src/simple_publisher.cpp)
 ament_target_dependencies(talker rclcpp std_msgs)
 
-# Create the subscriber executable
+# Creating the subscriber executable
 add_executable(listener src/simple_subscriber.cpp)
 ament_target_dependencies(listener rclcpp std_msgs)
 
