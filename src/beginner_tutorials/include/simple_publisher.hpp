@@ -1,24 +1,34 @@
-#ifndef SIMPLE_PUBLISHER_HPP_
-#define SIMPLE_PUBLISHER_HPP_
+/**
+ * @file simple_publisher.hpp
+ * @author Abhishek Avhad
+ * @brief Header file for ROS2 publisher node implementation
+ * @version 0.1
+ * @date 2024-02-08
+ *
+ * @copyright Copyright (c) 2024 Abhishek Avhad
+ *
+ * @details This header defines a ROS2 publisher node that publishes string
+ * messages with configurable frequency and provides a service to modify the
+ * message
+ */
 
+#ifndef BEGINNER_TUTORIALS_SIMPLE_PUBLISHER_HPP_
+#define BEGINNER_TUTORIALS_SIMPLE_PUBLISHER_HPP_
+
+#include <example_interfaces/srv/set_bool.hpp>
+#include <memory>
 #include <rclcpp/rclcpp.hpp>
 #include <std_msgs/msg/string.hpp>
 
-// Define the SimplePublisher class, which inherits from rclcpp::Node
 class SimplePublisher : public rclcpp::Node {
- public:
-  // Constructor for the SimplePublisher class
-  SimplePublisher();
+public:
+    SimplePublisher();
 
- private:
-  // Callback function for the timer
-  void timer_callback();
-  // Shared pointer to a timer
-  rclcpp::TimerBase::SharedPtr timer_;
-  // Shared pointer to a publisher for std_msgs::msg::String
-  rclcpp::Publisher<std_msgs::msg::String>::SharedPtr publisher_;
-  // Counter to keep track of the number of messages published
-  size_t count_;
+private:
+    void timer_callback();
+    rclcpp::TimerBase::SharedPtr timer_;
+    rclcpp::Publisher<std_msgs::msg::String>::SharedPtr publisher_;
+    size_t count_;
 };
 
-#endif  // SIMPLE_PUBLISHER_HPP_
+#endif  // BEGINNER_TUTORIALS_SIMPLE_PUBLISHER_HPP_

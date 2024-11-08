@@ -1,40 +1,11 @@
 # Build directories
-/build/
-/install/
-/log/
-/bin/
-/obj/
+build/
+install/
+log/
 
-# C++ specific
-*.o
-*.obj
-*.so
-*.exe
-*.dll
-*.dylib
-*.out
-*.dSYM/
-
-# Clang-Tidy cache
-/clang-tidy-cache/
-
-# Temporary files
-*.tmp
-*.temp
-*.swp
-*.swo
-
-# Logs
-*.log
-
-# OS generated files
-.DS_Store
-Thumbs.db
-
-# IDE specific (e.g., VSCode, CLion)
-.vscode/
-.idea/
-
-# Environment variables
-.env
+# compile commands
 compile_commands.json
+
+.clang-tidy
+
+.vscode
