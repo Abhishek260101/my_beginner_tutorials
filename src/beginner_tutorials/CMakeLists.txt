@@ -25,7 +25,6 @@ include_directories(include)
 # Create the publisher executable
 add_executable(talker 
   src/simple_publisher.cpp
-  src/main.cpp
 )
 
 ament_target_dependencies(talker 

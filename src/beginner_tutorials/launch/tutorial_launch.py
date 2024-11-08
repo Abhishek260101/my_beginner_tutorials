@@ -31,6 +31,7 @@ def generate_launch_description():
         output='screen'
     )
 
+    # Return the launch description
     return LaunchDescription([
         publish_freq_arg,
         talker_node,
