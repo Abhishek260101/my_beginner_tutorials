@@ -46,3 +46,6 @@ compile_commands.json
 **/Makefile
 **/cmake_install.cmake
 *.py[cod]
+
+# gitignore
+.gitignore
