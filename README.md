@@ -104,6 +104,9 @@ colcon test-result --verbose
 # Record all topics
 ros2 launch beginner_tutorials bag.launch.py
 
+# Disable bag recording
+ros2 launch beginner_tutorials bag.launch.py record_bag:=False
+
 # Play recorded bag (replace timestamp)
 ros2 bag play ~/ros2_bag_files/recording_YYYY_MM_DD_HH_MM_SS
 ```
