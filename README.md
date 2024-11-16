@@ -108,8 +108,5 @@ ros2 launch beginner_tutorials bag.launch.py
 ros2 bag play ~/ros2_bag_files/recording_YYYY_MM_DD_HH_MM_SS
 ```
 
-## License
-[Include your license information here]
-
 ## Author
-[Your Name]
+Abhishek Avhad
