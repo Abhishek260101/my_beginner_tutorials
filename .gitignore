@@ -1,0 +1,10 @@
+# Build directories
+build/
+install/
+log/
+
+# VSCode settings
+.vscode/
+
+# Compilation database
+compile_commands.json
