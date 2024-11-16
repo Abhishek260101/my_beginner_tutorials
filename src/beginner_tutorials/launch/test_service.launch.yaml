@@ -1,0 +1,10 @@
+launch:
+  - node:
+      pkg: 'beginner_tutorials'
+      exec: 'talker'
+      output: 'screen'
+
+  - test:
+      pkg: 'beginner_tutorials'
+      exec: 'integration_test_node'
+      name: 'integration_test'

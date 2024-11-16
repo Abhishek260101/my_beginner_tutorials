@@ -5,9 +5,12 @@
  * capabilities
  * @version 0.1
  * @date 2024-02-08
+ * @copyright Copyright (c) 2024 Abhishek Avhad
  */
 
 #include "simple_publisher.hpp"
+
+#include <tf2/LinearMath/Quaternion.h>
 
 #include <ctime>
 #include <functional>
@@ -32,6 +35,9 @@ SimplePublisher::SimplePublisher(const rclcpp::NodeOptions& options)
   // Create a parameter descriptor for frequency
   rcl_interfaces::msg::ParameterDescriptor freq_desc{};
   freq_desc.description = "Publishing frequency in Hz";
+
+  // Initialize TF broadcaster
+  tf_broadcaster_ = std::make_unique<tf2_ros::TransformBroadcaster>(*this);
 
   // Set the valid range for frequency parameter
   freq_desc.floating_point_range.resize(1);
@@ -88,32 +94,72 @@ void SimplePublisher::change_string_callback(
                      "Base string changed to: " << base_message_);
 }
 
+void SimplePublisher::broadcast_transform() {
+  // Add debug logging
+  RCLCPP_DEBUG(this->get_logger(), "Broadcasting transform");
+
+  geometry_msgs::msg::TransformStamped t;
+
+  // Set frame names
+  t.header.frame_id = "world";
+  t.child_frame_id = "talk";
+
+  // Set timestamp
+  t.header.stamp = this->get_clock()->now();
+
+  // Set translation (time-variant)
+  t.transform.translation.x = 2.0 * sin(count_ * 0.1);
+  t.transform.translation.y = 1.0 * cos(count_ * 0.1);
+  t.transform.translation.z = 0.5;
+
+  // Set rotation (time-variant)
+  tf2::Quaternion q;
+  q.setRPY(0.0, 0.0, count_ * 0.1);
+  t.transform.rotation.x = q.x();
+  t.transform.rotation.y = q.y();
+  t.transform.rotation.z = q.z();
+  t.transform.rotation.w = q.w();
+
+  // Add debug logging before sending
+  RCLCPP_DEBUG(this->get_logger(),
+               "Sending transform - Translation: [%f, %f, %f]",
+               t.transform.translation.x, t.transform.translation.y,
+               t.transform.translation.z);
+
+  // Send the transform
+  tf_broadcaster_->sendTransform(t);
+}
+
 /**
  * @brief Timer callback function for publishing messages
  */
 void SimplePublisher::timer_callback() {
-  // Create and populate the message
+  // Original message publishing
   auto message = std_msgs::msg::String();
   message.data = base_message_ + " World! " + std::to_string(count_++);
-
-  // Log and publish the message
   RCLCPP_INFO(this->get_logger(), "Publishing: '%s'", message.data.c_str());
   publisher_->publish(message);
+
+  // Adding explicit debug logging before broadcasting
+  RCLCPP_INFO(this->get_logger(), "About to broadcast transform");
+  broadcast_transform();
+  RCLCPP_INFO(this->get_logger(), "Transform broadcasted");
 }
 
 /**
  * @brief Updates the timer period based on the publish frequency
- * 
- * @details Calculates and sets a new timer period using the current publish_frequency_
+ *
+ * @details Calculates and sets a new timer period using the current
+ * publish_frequency_
  */
 void SimplePublisher::update_timer_period() {
-    // Calculate the period in milliseconds from the frequency
-    const int period_ms = static_cast<int>(1000.0 / publish_frequency_);
-    
-    // Create a new timer with the calculated period
-    timer_ = this->create_wall_timer(
-        std::chrono::milliseconds(period_ms),
-        std::bind(&SimplePublisher::timer_callback, this));
+  // Calculate the period in milliseconds from the frequency
+  const int period_ms = static_cast<int>(1000.0 / publish_frequency_);
+
+  // Create a new timer with the calculated period
+  timer_ = this->create_wall_timer(
+      std::chrono::milliseconds(period_ms),
+      std::bind(&SimplePublisher::timer_callback, this));
 }
 
 /**
